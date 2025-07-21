@@ -1,11 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.templating import Jinja2Templates
+from fastapi.responses import StreamingResponse
+from Controller import AsyncCSVProcessor
+
 app = FastAPI()
-
-# Load the HTML template
-templates = Jinja2Templates(directory="templates")
-
 
 # Allow CORS for all origins
 app.add_middleware(
@@ -16,5 +14,17 @@ app.add_middleware(
     allow_headers=["*"],  
 )
 
- 
+@app.post("/upload")
+async def upload_csv(
+    file: UploadFile = File(...),
+    x: int = Form(...),
+    y: int = Form(...),
+    i: float = Form(...),
+    j: float = Form(...)
+):
+    file_bytes = await file.read()
+    processor = AsyncCSVProcessor(x, y, i, j)
+    excel_file = await processor.process(file_bytes)
 
+    return StreamingResponse(excel_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                             headers={"Content-Disposition": "attachment; filename=result.xlsx"})
