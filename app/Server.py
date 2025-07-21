@@ -25,6 +25,7 @@ async def upload_csv(
     file_bytes = await file.read()
     processor = AsyncCSVProcessor(x, y, i, j)
     excel_file = await processor.process(file_bytes)
+    print(excel_file)
 
     return StreamingResponse(excel_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                              headers={"Content-Disposition": "attachment; filename=result.xlsx"})
