@@ -2,7 +2,7 @@ from fastapi import FastAPI,File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from Controller import AsyncCSVProcessor
-
+import datetime
 app = FastAPI()
 
 # Allow CORS for all origins
@@ -24,8 +24,12 @@ async def upload_csv(
 ):
     file_bytes = await file.read()
     processor = AsyncCSVProcessor(x, y, i, j)
-    excel_file = await processor.process(file_bytes)
-    print(excel_file)
+    excel_file,frequecyTable = await processor.process(file_bytes)
+    temp_excel_path = f"./tmp/result{datetime.datetime.now()}.xlsx"
+    with open(temp_excel_path, "wb") as f:
+        f.write(excel_file.getvalue())
 
-    return StreamingResponse(excel_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                             headers={"Content-Disposition": "attachment; filename=result.xlsx"})
+    return {
+        "Table":frequecyTable.to_dict(orient="split"),
+        "XlPath":temp_excel_path
+    }

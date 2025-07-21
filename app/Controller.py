@@ -61,13 +61,11 @@ class AsyncCSVProcessor:
 
         freq_table = freq_table.reindex(sorted(freq_table.index, key=extract_lower_bound))
         freq_table = freq_table[sorted(freq_table.columns, key=extract_lower_bound)]
-        df = pd.DataFrame(freq_table)
-        print(df.to_numpy)
-
+        
         # Save to in-memory Excel
         output = BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df.to_excel(writer, sheet_name='Data', index=False)
             freq_table.to_excel(writer, sheet_name='Frequency_Table')
         output.seek(0)
-        return output
+        return (output,freq_table)

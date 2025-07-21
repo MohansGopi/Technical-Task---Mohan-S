@@ -1,4 +1,4 @@
-#!/home/mohan/Documents/Technical-Task---Mohan-S/.venv/bin/python3
+#!/home/mohan/Documents/Technical-Task---Mohan-S/app/.venv/bin/python3
 
 ##############################################################################
 #

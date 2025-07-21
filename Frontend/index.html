@@ -231,30 +231,30 @@ function visualizeData(x,y,z){
   formData.append("i", i);
   formData.append("j", j);
 
-  fetch("http://localhost:8000/upload", { 
+  fetch("http://localhost:8000/upload", {
     method: "POST",
-    body: formData
+    body: formData,
   })
   .then(response => {
-    if (!response.ok) throw new Error("Network response was not ok");
-    return response.json();
+    if (!response.ok) {
+      return response.text().then(errText => {
+        throw new Error(`Server error ${response.status}: ${errText}`);
+      });
+    }
+    return response.json(); // Receive Excel file
   })
   .then(data => {
-    console.log("Server response:", data);
-    const x = ['-80 to -60', '-60 to -40', '-40 to -20', '-20 to 0', '0 to 20'];
-    const y = ['-100 to -50', '-50 to 0', '0 to 50', '50 to 100', '100 to 150'];
-    const z = [
-      [8, 32, 176, 476, 323],
-      [16, 40, 309, 578, 350],
-      [8, 18, 109, 209, 143],
-      [3, 7, 48, 85, 57],
-      [3, 6, 18, 66, 31]
-    ];
-visualizeData(x,y,z);
+    const { columns, index, data: values } = data.Table;
+    visualizeData(
+      columns,
+      index,
+      values
+    );
+    
   })
   .catch(error => {
-    console.error("Upload error:", error);
-    alert("Upload failed.");
+    console.error("Upload failed:", error);
+    alert("Upload failed: " + error.message);
   });
 });
     
