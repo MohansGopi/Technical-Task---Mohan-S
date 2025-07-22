@@ -245,11 +245,34 @@ function visualizeData(x,y,z){
   })
   .then(data => {
     const { columns, index, data: values } = data.Table;
+
     visualizeData(
       columns,
       index,
       values
     );
+    fetch(`http://localhost:8000/download/${data.XlPath.split("/")[2]}`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Server error ${response.status}`);
+    }
+    return response.blob();
+  })
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = data.XlPath.split("/")[2];  // You can customize filename here
+    document.body.appendChild(a);
+    a.click();  // Trigger the download
+    a.remove();  // Clean up
+    URL.revokeObjectURL(url);  // Release memory
+  })
+  .catch(error => {
+    console.error("Download failed:", error);
+    alert("Download failed: " + error.message);
+  });
+
     
   })
   .catch(error => {
