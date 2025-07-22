@@ -251,7 +251,7 @@ function visualizeData(x,y,z){
       index,
       values
     );
-    fetch(`https://technical-task-mohan-s.onrender.com/download/${data.XlPath.split("/")[2]}`)
+    fetch(`https://technical-task-mohan-s.onrender.com/download/${data.XlPath.split("/")[3]}`)
   .then(response => {
     if (!response.ok) {
       throw new Error(`Server error ${response.status}`);
@@ -262,7 +262,7 @@ function visualizeData(x,y,z){
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = data.XlPath.split("/")[2];  // You can customize filename here
+    a.download = data.XlPath.split("/")[3];  // You can customize filename here
     document.body.appendChild(a);
     a.click();  // Trigger the download
     a.remove();  // Clean up

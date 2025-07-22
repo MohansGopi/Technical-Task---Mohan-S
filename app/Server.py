@@ -1,6 +1,7 @@
 from fastapi import FastAPI,File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from app.Controller import AsyncCSVProcessor
 from datetime import timedelta, datetime
 import os
@@ -20,6 +21,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],  
 )
+
+app.mount("/frontend", StaticFiles(directory="Frontend", html=True), name="frontend")
+
+@app.get("/")
+def serve_index():
+    return FileResponse("Frontend/index.html")
 
 async def delete_old_temp_files():
     while True:
