@@ -56,7 +56,7 @@ async def upload_csv(
     file_bytes = await file.read()
     processor = AsyncCSVProcessor(x, y, i, j)
     excel_file,frequecyTable = await processor.process(file_bytes)
-    temp_excel_path = f"./tmp/result{datetime.now()}.xlsx"
+    temp_excel_path = f"./app/tmp/result{datetime.now()}.xlsx"
     with open(temp_excel_path, "wb") as f:
         f.write(excel_file.getvalue())
 
@@ -67,6 +67,6 @@ async def upload_csv(
 
 @app.get("/download/{filepath}")
 async def downloadFile(filepath:str):
-    path = f"./tmp/{filepath}"
+    path = f"./app/tmp/{filepath}"
     return FileResponse(path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         filename=filepath)

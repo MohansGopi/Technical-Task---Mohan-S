@@ -231,7 +231,7 @@ function visualizeData(x,y,z){
   formData.append("i", i);
   formData.append("j", j);
 
-  fetch("http://localhost:8000/upload", {
+  fetch("https://technical-task-mohan-s.onrender.com/upload", {
     method: "POST",
     body: formData,
   })
@@ -251,7 +251,7 @@ function visualizeData(x,y,z){
       index,
       values
     );
-    fetch(`http://localhost:8000/download/${data.XlPath.split("/")[2]}`)
+    fetch(`https://technical-task-mohan-s.onrender.com/download/${data.XlPath.split("/")[2]}`)
   .then(response => {
     if (!response.ok) {
       throw new Error(`Server error ${response.status}`);
