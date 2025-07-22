@@ -9,7 +9,7 @@ import asyncio
 
 app = FastAPI()
 
-TEMP_DIR = "./tmp"
+TEMP_DIR = "./app/tmp"
 FILE_LIFETIME = timedelta(hours=0.5)
 
 # Allow CORS for all origins
